@@ -30,7 +30,6 @@ body {
     background-color: var(--color-neutrality);
     transition: background-color var(--color-bg-transition);
     color: var(--color-text);
-    overflow: hidden;
 }
 
 #app-container {
@@ -41,7 +40,6 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    overflow-y: auto;
 }
 
 section {
