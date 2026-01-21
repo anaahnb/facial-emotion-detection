@@ -1,6 +1,15 @@
 # Aplicação de detecção de emoções em tempo real
 
-Este projeto consiste em uma aplicação web capaz de detectar emoções humanas em tempo real a partir de vídeo.
+Este projeto consiste em uma aplicação web desenvolvida para detectar emoções humanas em tempo real a partir de vídeo, utilizando técnicas de processamento de imagens e aprendizado de máquina.
+
+A aplicação é capaz de reconhecer as seguintes emoções faciais:
+
+- Raiva
+- Desprezo
+- Felicidade
+- Neutro
+- Tristeza
+- Surpresa
 
 ## Tecnologias utilizadas
 - HTML5
@@ -13,23 +22,26 @@ Este projeto consiste em uma aplicação web capaz de detectar emoções humanas
 
 ## Arquitetura
 
-A arquitetura do sistema segue o modelo Client-Side Machine Learning, conforme ilustrado abaixo:
-
+O projeto foi estruturado de forma a separar claramente as etapas de treinamento do modelo e inferência em tempo real, seguindo boas práticas de aprendizado de máquina e engenharia de software.
 
 ```
-Câmera do Usuário
-        ↓
-Captura de Frames (Web API - getUserMedia)
-        ↓
-Detecção de Rosto (BlazeFace)
-        ↓
-Pré-processamento da Imagem
-        ↓
-Classificação de Emoções (TensorFlow.js)
-        ↓
-Exibição do Resultado em Tempo Real
+Treinamento (Python) → Exportação para TensorFlow.js → Inferência (Browser)
 ```
 
+
+###  Camadas da Arquitetura
+
+* **Treinamento**
+
+  * Responsável pelo treinamento da rede neural convolucional baseada em **MobileNetV2**
+  * Avaliação do modelo por meio de métricas e matriz de confusão
+  * Conversão do modelo treinado para o formato compatível com TensorFlow.js
+
+* **Inferência**
+
+  * Captura de vídeo em tempo real via webcam
+  * Detecção de rostos utilizando BlazeFace
+  * Classificação das emoções diretamente no navegador com TensorFlow.js
 
 ## Treinamento do Modelo
 
@@ -68,30 +80,50 @@ O modelo de classificação de emoções foi treinado previamente em ambiente Py
 
 A matriz de confusão foi utilizada para avaliar o desempenho do modelo de classificação de emoções.
 
-![Matriz de confusão](./plots/confusion_matrix.png)
+![Matriz de confusão](./training/plots/confusion_matrix.png)
 
 A partir da matriz, é possível observar:
-
 * A taxa de acertos por classe
 * Emoções com maior confusão entre si
 * Pontos fortes e limitações do modelo
+
+---
+
+O gráfico abaixo apresenta a evolução da acurácia (accuracy) e da função de perda (loss) do modelo ao longo das épocas de treinamento.
+
+![Histórico de Treinamento do Modelo](./training/plots/training_history.png)
+
+A partir do gráfico, é possível observar a convergência do modelo durante o treinamento, indicando aprendizado progressivo e estabilidade nas métricas avaliadas.
 
 
 ## Estrutura de Pastas e Arquivos
 
 ```
-project-root/
-├── index.html                 # Página principal da aplicação
-├── script.js                  # Lógica principal (captura de vídeo e inferência)
-├── EmotionDetectorFactory.js  # Fábrica do detector de emoções
-├── tf.min.js                  # TensorFlow.js
-├── blazeface/                 # Biblioteca de detecção de rostos
-├── model/                     # Modelo treinado
-│   ├── model.json             # Arquitetura do modelo
-│   ├── group1-shard*.bin      # Pesos do modelo
-│   └── mobilenet/             # Pesos da MobileNet
-└── README.md                  # Documentação do projeto
+facial-emotion-detection/
+├── src/
+│   └── web/                     # Aplicação web (TensorFlow.js)
+│       ├── index.html           # Página principal
+│       ├── script.js            # Lógica de captura e inferência
+│       ├── EmotionDetectorFactory.js
+│       ├── tf.min.js            # TensorFlow.js
+│       ├── blazeface/           # Detecção de rostos
+│       └── model/               # Modelo treinado
+│           ├── model.json
+│           ├── group1-shard*.bin
+│           └── mobilenet/
+│
+├── training/                    # Treinamento do modelo (Python)
+│   ├── train_mobilenetv2.py     # Script de treinamento
+│   ├── convert_mobilenetv2.py   # Conversão para TensorFlow.js
+│   └── plots/                   # Resultados experimentais
+│       ├── confusion_matrix.png
+│       └── accuracy_loss.png
+│
+└── README.md                    # Documentação do projeto
+
 ```
+
+Os scripts em `training/` documentam o processo de treinamento e avaliação do modelo, enquanto a pasta `src/web/` contém exclusivamente a aplicação final executada no navegador.
 
 
 ## Como executar a aplicação
@@ -124,7 +156,10 @@ http://localhost:8000/src/web/
 
 ---
 
+
 Ao entrar no site, **clique em "Start Camera"**, espere alguns segundos até que o modelo conclua o carregamento e **permita o acesso a câmera através de um pop-up que aparecerá no navegador**
 
 ![Demonstração do pop-up](./src/web/assets/popup.png)
+
 <small>Demonstração de um pop-up de permissão</small>
+
