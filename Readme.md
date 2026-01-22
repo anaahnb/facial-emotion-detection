@@ -2,20 +2,12 @@
 
 Este projeto consiste em uma aplicação web desenvolvida para detectar emoções humanas em tempo real a partir de vídeo, utilizando técnicas de processamento de imagens e aprendizado de máquina.
 
-A aplicação é capaz de reconhecer as seguintes emoções faciais:
-
-- Raiva
-- Desprezo
-- Felicidade
-- Neutro
-- Tristeza
-- Surpresa
+O dataset **FERPlus** foi utilizado e, das 8 classes originais, optamos por manter apenas 6 classes: **raiva, desprezo, felicidade, neutralidade, tristeza e surpresa**
 
 ## Tecnologias utilizadas
 - HTML5
 - Python 3
 - TensorFlow.js
-- BlazeFace
 - MobileNet
 - Web API
 
@@ -61,7 +53,7 @@ O modelo de classificação de emoções foi treinado previamente em ambiente Py
 
 3. **Extração de Características**
 
-   * Uso da arquitetura **MobileNet** como base (transfer learning)
+   * Uso da arquitetura **MobileNet** como base
 
 4. **Treinamento da Rede Neural**
 
